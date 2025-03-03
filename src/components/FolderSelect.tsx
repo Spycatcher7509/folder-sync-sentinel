@@ -2,6 +2,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Folder } from "lucide-react";
+import { open } from '@tauri-apps/api/dialog';
 
 interface FolderSelectProps {
   label: string;
@@ -20,6 +21,23 @@ const FolderSelect = ({
   onBrowse,
   className,
 }: FolderSelectProps) => {
+  const handleBrowse = async () => {
+    try {
+      // Open a folder selection dialog
+      const selected = await open({
+        directory: true,
+        multiple: false,
+        title: `Select ${label}`
+      });
+      
+      if (selected && !Array.isArray(selected)) {
+        onChange(selected);
+      }
+    } catch (error) {
+      console.error("Error selecting folder:", error);
+    }
+  };
+
   return (
     <div className={cn("space-y-3", className)}>
       <h3 className="text-lg font-medium">{label}</h3>
@@ -36,7 +54,7 @@ const FolderSelect = ({
         </div>
         <button
           type="button"
-          onClick={onBrowse}
+          onClick={handleBrowse}
           className="h-full px-4 py-3 flex items-center justify-center font-medium text-sm text-primary bg-accent/50 hover:bg-accent transition-colors duration-200 rounded-r-lg"
         >
           Browse
