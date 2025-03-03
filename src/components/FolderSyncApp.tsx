@@ -153,7 +153,7 @@ const FolderSyncApp = () => {
           onMonitoringChange={handleMonitoringChange}
           onSyncNow={syncFolders}
           onStart={handleStart}
-          canStart={isReadyToSync}
+          canStart={isReadyToSync && !isMonitoring}
         />
       </div>
     </div>
